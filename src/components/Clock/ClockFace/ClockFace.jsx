@@ -8,7 +8,7 @@ const Circle = styled.div`
   position: relative;
   width: 210px;
   height: 210px;
-  border: 5px solid #ff00bf;
+  border: 5px solid #727272;
   border-radius: 50%;
 `
 
@@ -31,8 +31,13 @@ for (let i = 1; i <= 12; i++) {
   )
 }
 
-export default function ClockFace() {
+export default function ClockFace(props) {
   console.log(numbers)
 
-  return <Circle>{numbers.map((o) => o)}</Circle>
+  return (
+    <Circle>
+      {numbers.map((o) => o)}
+      {props.children}
+    </Circle>
+  )
 }

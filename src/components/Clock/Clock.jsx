@@ -4,6 +4,7 @@ import styled from 'styled-components'
 import moment from 'moment'
 import 'moment/locale/ru'
 import ClockFace from './ClockFace/ClockFace'
+import SecondsArrow from './SecondsArrow/SecondsArrow'
 
 moment.locale('ru')
 
@@ -32,12 +33,12 @@ const MinutesArrow = styled(HoursArrow)`
   transform: translate(-2.5px, -2.5px) rotate(${(props) => props.minutes}deg);
 `
 
-const SecondsArrow = styled(HoursArrow)`
-  width: 45px;
-  border-bottom: 2px solid #f30101;
+// const SecondsArrow = styled(HoursArrow)`
+//   width: 45px;
+//   border-bottom: 2px solid #f30101;
 
-  transform: translate(-2.5px, -2.5px) rotate(${(props) => props.seconds}deg);
-`
+//   transform: translate(-2.5px, -2.5px) rotate(${(props) => props.seconds}deg);
+// `
 
 function Clock(props) {
   const [time, setTime] = useState({
@@ -79,7 +80,9 @@ function Clock(props) {
     //   <MinutesArrow minutes={minutesToDegree(time.minutes)} />
     //   <SecondsArrow seconds={minutesToDegree(time.seconds)} />
     // </Circle>
-    <ClockFace />
+    <ClockFace>
+      <SecondsArrow />
+    </ClockFace>
   )
 }
 
