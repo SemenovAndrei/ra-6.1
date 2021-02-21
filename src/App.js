@@ -4,7 +4,7 @@ import Clock from './components/Clock/Clock'
 function App() {
   return (
     <div className="App">
-      <Clock gmt="17" />
+      <Clock gmt="12" />
     </div>
   )
 }

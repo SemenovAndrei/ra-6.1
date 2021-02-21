@@ -2,32 +2,44 @@ import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import moment from 'moment'
 
-const Arrow = styled.div`
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 95px;
-  border-bottom: 2px solid #f83333;
-  transform-origin: 0 0;
+// const coordsX = (deg) => Math.cos((-90 + deg) * (Math.PI / 180)) * 75 + 150
+// const coordsY = (deg) => Math.sin((-90 + deg) * (Math.PI / 180)) * 75 + 75
 
-  transform: translate(0, 0) rotate(${(props) => props.seconds}deg);
+const Arrow = styled.div.attrs((props) => ({
+  style: {
+    transform: `translateX(0) translateY(-50%) rotate(${props.seconds}deg)`,
+  },
+}))`
+  position: absolute;
+  left: 50%;
+  top: 50%;
+
+  width: 75px;
+  height: 2px;
+  background-color: red;
+  border-radius: 1px;
+  transform-origin: left;
 `
 
 function SecondsArrow() {
-  const [seconds, setSeconds] = useState(moment().format('ss'))
+  const [seconds, setSeconds] = useState(
+    new Date().getSeconds() + new Date().getMilliseconds() / 1000
+  )
+
+  const minutesToDegree = (time) => time * 6 - 90
 
   useEffect(() => {
-    setSeconds(() => moment().format('ss'))
+    // setSeconds(() => new Date().getSeconds() + new Date().getMilliseconds() / 1000)
 
-    const timeout = setTimeout(() => setSeconds(() => moment().format('ss')), 1000)
+    const timeout = setTimeout(
+      () =>
+        setSeconds(() => new Date().getSeconds() + new Date().getMilliseconds() / 1000),
+      1000 / 60
+    )
     return () => {
       clearTimeout(timeout)
     }
-  }, [seconds])
-
-  console.log(seconds)
-
-  const minutesToDegree = (time) => time * 6 - 90
+  })
 
   return <Arrow seconds={minutesToDegree(seconds)}></Arrow>
 }
