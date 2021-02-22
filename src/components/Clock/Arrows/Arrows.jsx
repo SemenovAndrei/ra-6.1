@@ -1,28 +1,60 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
-import SecondsArrow from '../SecondsArrow/SecondsArrow'
-import HoursArrow from '../HoursArrow/HoursArrow'
-import MinutesArrow from '../MinutesArrow/MinutesArrow'
+import styled from 'styled-components'
+
+const ArrowSeconds = styled.div.attrs((props) => ({
+  style: {
+    transform: `translateX(0) translateY(-50%) rotate(${props.deg}deg)`,
+  },
+}))`
+  position: absolute;
+  left: 50%;
+  top: 50%;
+
+  width: 75px;
+  height: 2px;
+  background-color: red;
+  border-radius: 1px;
+  transform-origin: left;
+`
+
+const ArrowMinutes = styled(ArrowSeconds)`
+  height: 4px;
+  background-color: #000000;
+  border-radius: 2px;
+`
+
+const ArrowsHours = styled(ArrowMinutes)`
+  width: 50px;
+`
+
+const timeToDegree = (time) => time * 6 - 90
 
 function Arrows(props) {
-  const [time, setTime] = useState({
-    milliSeconds: new Date().getMilliseconds(),
-    seconds: new Date().getSecond() + this.milliSeconds / 1000,
-    minutes: new Date().getMinutes() + this.seconds / 60,
-    hours: new Date().getHours() + this.minutes / 60,
+  const [time, setTime] = useState(new Date())
+
+  const seconds = time.getSeconds() + time.getMilliseconds() / 1000
+  const minutes = time.getMinutes() + time.getSeconds() / 60
+  const hours = time.getUTCHours() + +props.gmt + minutes / 60
+
+  useEffect(() => {
+    const timeout = setTimeout(() => setTime(() => new Date()), 1000 / 60)
+    return () => {
+      clearTimeout(timeout)
+    }
   })
 
   return (
     <div>
-      <HoursArrow gmt="7" />
-      <MinutesArrow />
-      <SecondsArrow />
+      <ArrowsHours deg={timeToDegree(hours) * 5}></ArrowsHours>
+      <ArrowMinutes deg={timeToDegree(minutes)}></ArrowMinutes>
+      <ArrowSeconds deg={timeToDegree(seconds)}></ArrowSeconds>
     </div>
   )
 }
 
 Arrows.defaultProps = {
-  gmt: '0',
+  gmt: '3',
 }
 
 Arrows.propTypes = {

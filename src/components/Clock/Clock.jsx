@@ -1,64 +1,55 @@
-import React, { useEffect, useState } from 'react'
-import PropTypes from 'prop-types'
+import React from 'react'
 import styled from 'styled-components'
-import moment from 'moment'
-import 'moment/locale/ru'
+import PropTypes from 'prop-types'
 import ClockFace from './ClockFace/ClockFace'
-import SecondsArrow from './SecondsArrow/SecondsArrow'
-import MinutesArrow from './MinutesArrow/MinutesArrow'
-import HoursArrow from './HoursArrow/HoursArrow'
+import Arrows from './Arrows/Arrows'
 
-moment.locale('ru')
+const ClockElement = styled.div`
+  position: relative;
+  margin: 30px;
+`
+
+const Button = styled.button`
+  position: absolute;
+  top: 10px;
+  right: 0;
+  padding: 5px;
+  border-style: none;
+  background-color: transparent;
+  cursor: pointer;
+`
+const Title = styled.h3`
+  margin: 0;
+  font-weight: bold;
+`
 
 function Clock(props) {
-  const [time, setTime] = useState({
-    hours: moment().utcOffset(`gmt${props.gmt}`).format('hh'),
-    minutes: moment().format('mm'),
-    seconds: moment().format('ss'),
-  })
-
-  // useEffect(() => {
-  //   setTime({
-  //     hours: moment().utcOffset(`gmt${props.gmt}`).format('hh'),
-  //     minutes: moment().format('mm'),
-  //     seconds: moment().format('ss'),
-  //   })
-
-  //   const timeout = setTimeout(
-  //     () =>
-  //       setTime({
-  //         hours: moment().utcOffset(`gmt${props.gmt}`).format('hh'),
-  //         minutes: moment().format('mm'),
-  //         seconds: moment().format('ss'),
-  //       }),
-  //     1000
-  //   )
-  //   return () => {
-  //     clearInterval(timeout)
-  //   }
-  // }, [props.gmt, time])
-
-  const minutesToDegree = (time) => time * 6 - 90
-
-  const hoursToDegree = (time) => minutesToDegree(time) * 5
-
-  console.log(time)
-
+  const onDelete = (event) => {
+    props.onDelete(event.target.id)
+  }
   return (
-    <ClockFace>
-      <HoursArrow gmt="7" />
-      <MinutesArrow />
-      <SecondsArrow />
-    </ClockFace>
+    <ClockElement>
+      <Title>{props.title}</Title>
+      <ClockFace>
+        <Arrows gmt={props.zone}></Arrows>
+      </ClockFace>
+      <Button id={props.id} onClick={onDelete}>
+        X
+      </Button>
+    </ClockElement>
   )
 }
 
 Clock.defaultProps = {
-  gmt: '0',
+  title: 'Москва',
+  zone: '3',
+  id: 'test',
 }
 
 Clock.propTypes = {
-  gmt: PropTypes.string.isRequired,
+  title: PropTypes.string.isRequired,
+  zone: PropTypes.string.isRequired,
+  id: PropTypes.string.isRequired,
 }
 
 export default Clock
